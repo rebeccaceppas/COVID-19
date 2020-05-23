@@ -1,4 +1,4 @@
-# COVID-19
+# COVID-19 data visualization
 
 ## The project
 
