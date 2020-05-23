@@ -1,23 +1,64 @@
-import matplotlib as plt
+from matplotlib import pyplot
 import pandas as pd
 import OpenBlender
 import json
 
-#data 
-action = 'API_getObservationsFromDataset'
-      
-parameters = { 
-        'token':'5ec160ba9516291bc83ffd36pxpx4duSekHkWh10f0s92I3Oi960bF',
-	    'id_user':'5ec160ba9516291bc83ffd36',
-	    'id_dataset':'5e7a0d5d9516296cb86c6263',
-        'drop_features':["lat","long","province_state"],
-        'filter_select':{'feature':'country_region', 'values':['Brazil', 'Canada', 'United States']},
-	    'consumption_confirmation':'on',
-	    'date_filter':{"start_date":"2020-04-15T05:00:00.000Z","end_date":"2020-05-17"},
-	    'add_time':{"treatment":"date"} 
-}
-        
-df_data = pd.read_json(json.dumps(OpenBlender.call(action, parameters)['sample']), convert_dates=False, convert_axes=False).sort_values('timestamp', ascending=False)
-df_data.reset_index(drop=True, inplace=True)
-df_data.head()
-print(df_data.head())
+url = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
+
+data = pd.read_csv(
+        '/Users/rebeccaceppas/code/COVID-19/owid-covid-data.csv', 
+        usecols=['location', 'date', 'total_cases', 'new_cases', 'total_deaths', 'new_deaths'],
+        parse_dates=['date'],
+        )
+
+data = data.set_index('date')
+data = data.sort_values('date', ascending=True)
+
+#Country specific data
+Brazil = data.loc[data['location']=='Brazil']
+Canada = data.loc[data['location']=='Canada']
+US = data.loc[data['location']=='United States']
+
+
+#creating plot object
+pyplot.figure(figsize=(12, 6))
+
+#creating each subplot
+pyplot.subplot(2,2,1)
+pyplot.plot(Brazil['total_cases'])
+pyplot.plot(Canada['total_cases'])
+pyplot.plot(US['total_cases'])
+pyplot.legend(['Brazil', 'Canada', 'United States'])
+pyplot.title('Total cases of COVID-19')
+pyplot.xlabel('Date')
+pyplot.ylabel('Total Cases (millions)')
+
+pyplot.subplot(2,2,2)
+pyplot.plot(Brazil['total_deaths'])
+pyplot.plot(Canada['total_deaths'])
+pyplot.plot(US['total_deaths'])
+pyplot.legend(['Brazil', 'Canada', 'United States'])
+pyplot.title('Total deaths by COVID-19')
+pyplot.xlabel('Date')
+pyplot.ylabel('Total Deaths')
+
+pyplot.subplot(2,2,3)
+pyplot.plot(Brazil['new_cases'])
+pyplot.plot(Canada['new_cases'])
+pyplot.plot(US['new_cases'])
+pyplot.legend(['Brazil', 'Canada', 'United States'])
+pyplot.title('New Cases of COVID-19')
+pyplot.xlabel('Date')
+pyplot.ylabel('New Cases')
+
+pyplot.subplot(2, 2, 4)  # rows, columns, panel selected
+pyplot.plot(Brazil['new_deaths'])
+pyplot.plot(Canada['new_deaths'])
+pyplot.plot(US['new_deaths'])
+pyplot.legend(['Brazil', 'Canada', 'United States'])
+pyplot.title('New Deaths by COVID-19')
+pyplot.xlabel('Date')
+pyplot.ylabel('New Deaths')
+
+pyplot.tight_layout()
+pyplot.show()
