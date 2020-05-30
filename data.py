@@ -8,7 +8,7 @@ def download(url):
         r = requests.get(url, allow_redirects=True)
         open('owid-covid-data.csv', 'wb').write(r.content)
 
-def data():
+def dat():
         ''' Creates pandas DataFrame for columns location, date, total and new cases, and total and new deaths. '''
         data = pd.read_csv(
         os.getcwd()+'/owid-covid-data.csv', 
@@ -17,21 +17,59 @@ def data():
         )
         data = data.set_index('date')
         data = data.sort_values('date', ascending=True)
+        
         return data
 
 def sub_data(countries, data):
         ''' Uses inputs countries list from user, creates sub DataFrames for desired countries. '''
+        use = []
         for country in countries:      
-                country = data.loc[data['location']==country.capitalize()]
-        print(countries.head())
-        return countries
+                use.append(data.loc[data['location']==country.capitalize()])
+        return use
 
-""" def make_plot(countries):
+def make_plot(countries, data):
        
+        plt.figure(figsize=(12, 6))
 
-       #4 for loops, each for one of the plots
-       
-        pass """
+        #creating each subplot
+        plt.subplot(2,2,1)
+        for country in countries:
+                plt.plot(data.loc[data['location']==country.capitalize()['total_cases']])
+        plt.legend(countries)
+        plt.title('Total cases of COVID-19')
+        plt.xlabel('Date')
+        plt.ylabel('Total Cases (millions)')
+
+        """ plt.subplot(2,2,2)
+        plt.plot(Brazil['total_deaths'])
+        plt.plot(Canada['total_deaths'])
+        plt.plot(US['total_deaths'])
+        plt.legend(['Brazil', 'Canada', 'United States'])
+        plt.title('Total deaths by COVID-19')
+        plt.xlabel('Date')
+        plt.ylabel('Total Deaths')
+
+        plt.subplot(2,2,3)
+        plt.plot(Brazil['new_cases'])
+        plt.plot(Canada['new_cases'])
+        plt.plot(US['new_cases'])
+        plt.legend(['Brazil', 'Canada', 'United States'])
+        plt.title('New Cases of COVID-19')
+        plt.xlabel('Date')
+        plt.ylabel('New Cases')
+
+        plt.subplot(2, 2, 4)
+        plt.plot(Brazil['new_deaths'])
+        plt.plot(Canada['new_deaths'])
+        plt.plot(US['new_deaths'])
+        plt.legend(['Brazil', 'Canada', 'United States'])
+        plt.title('New Deaths by COVID-19')
+        plt.xlabel('Date')
+        plt.ylabel('New Deaths') """
+
+        plt.tight_layout()
+        plt.show()
+
 
 """ def final():
         download(url)
@@ -41,9 +79,8 @@ def sub_data(countries, data):
         pass """
 
 
-
-url = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
-download(url)
-data()
+download('https://covid.ourworldindata.org/data/owid-covid-data.csv')
+data = dat()
 countries = input('What countries do you want to look at? Input them with a single space as separation. Ex. Brazil US Canada \n').split(' ')
 sub_data(countries, data)
+""" make_plot(countries, data) """
