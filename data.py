@@ -3,6 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
+
+
+
 def download(url):
         ''' Downloads data into current working directory with name owid-covid-data.csv '''
         r = requests.get(url, allow_redirects=True)
@@ -19,6 +22,16 @@ def dat():
         data = data.sort_values('date', ascending=True)
         
         return data
+
+def changes(countries):
+        ''' Makes sure input is written as it is on data. '''
+        for i in range(len(countries)):
+                if countries[i] == 'UK':
+                        countries[i] = 'United Kingdom'
+                elif countries[i] == 'US' or countries[i] == 'United States of America':
+                        countries[i] = 'United States'
+        return countries
+
 
 def sub_data(countries, data):
         ''' Uses inputs countries list from user, creates sub DataFrames for desired countries. '''
@@ -70,5 +83,6 @@ def make_plot(countries, data):
 download('https://covid.ourworldindata.org/data/owid-covid-data.csv')
 data = dat()
 countries = input('What countries do you want to look at? Input them with a single space as separation. Ex. Brazil US Canada \n').split(' ')
+changes(countries)
 sub_data(countries, data)
 make_plot(countries, data)
