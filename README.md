@@ -11,8 +11,7 @@ Simple project to help collect and visualize data about COVID-19 cases and death
   - pip install matplotlib
 - Pandas for data collection
   - pip install pandas
-- Requests and Os modules
-  - pip install os
+- Requests module
   - pip install requests
 
 ## Data 
