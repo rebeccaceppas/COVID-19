@@ -34,53 +34,41 @@ def make_plot(countries, data):
         #creating each subplot
         plt.subplot(2,2,1)
         for country in countries:
-                plt.plot(data.loc[data['location']==country.capitalize()['total_cases']])
+                plt.plot(data.loc[data['location']==country.capitalize()]['total_cases'])
         plt.legend(countries)
         plt.title('Total cases of COVID-19')
         plt.xlabel('Date')
         plt.ylabel('Total Cases (millions)')
 
-        """ plt.subplot(2,2,2)
-        plt.plot(Brazil['total_deaths'])
-        plt.plot(Canada['total_deaths'])
-        plt.plot(US['total_deaths'])
-        plt.legend(['Brazil', 'Canada', 'United States'])
+        plt.subplot(2,2,2)
+        for country in countries:
+                plt.plot(data.loc[data['location']==country.capitalize()]['total_deaths'])
+        plt.legend(countries)
         plt.title('Total deaths by COVID-19')
         plt.xlabel('Date')
         plt.ylabel('Total Deaths')
 
         plt.subplot(2,2,3)
-        plt.plot(Brazil['new_cases'])
-        plt.plot(Canada['new_cases'])
-        plt.plot(US['new_cases'])
-        plt.legend(['Brazil', 'Canada', 'United States'])
+        for country in countries:
+                plt.plot(data.loc[data['location']==country.capitalize()]['new_cases'])
+        plt.legend(countries)
         plt.title('New Cases of COVID-19')
         plt.xlabel('Date')
         plt.ylabel('New Cases')
 
         plt.subplot(2, 2, 4)
-        plt.plot(Brazil['new_deaths'])
-        plt.plot(Canada['new_deaths'])
-        plt.plot(US['new_deaths'])
-        plt.legend(['Brazil', 'Canada', 'United States'])
+        for country in countries:
+                plt.plot(data.loc[data['location']==country.capitalize()]['new_deaths'])
+        plt.legend(countries)
         plt.title('New Deaths by COVID-19')
         plt.xlabel('Date')
-        plt.ylabel('New Deaths') """
+        plt.ylabel('New Deaths')
 
         plt.tight_layout()
         plt.show()
-
-
-""" def final():
-        download(url)
-        data(url)
-        sub_data(countries)
-        make_plot()
-        pass """
-
 
 download('https://covid.ourworldindata.org/data/owid-covid-data.csv')
 data = dat()
 countries = input('What countries do you want to look at? Input them with a single space as separation. Ex. Brazil US Canada \n').split(' ')
 sub_data(countries, data)
-""" make_plot(countries, data) """
+make_plot(countries, data)
