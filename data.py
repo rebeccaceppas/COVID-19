@@ -28,14 +28,6 @@ def changes(countries):
                         countries[i] = 'United States'
         return countries
 
-
-def sub_data(countries, data):
-        ''' Uses inputs countries list from user, creates sub DataFrames for desired countries. '''
-        use = []
-        for country in countries:      
-                use.append(data.loc[data['location']==country.title()])
-        return use
-
 def make_plot(countries, data): 
         plt.figure(figsize=(12, 6))
         
@@ -78,5 +70,4 @@ download('https://covid.ourworldindata.org/data/owid-covid-data.csv')
 data = dat()
 countries = input('What countries do you want to look at? Separate them with a comma. Ex: Brazil, United States, Canada \n').split(', ')
 countries = changes(countries)
-sub_data(countries, data)
 make_plot(countries, data)
