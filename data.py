@@ -3,9 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-
-
-
 def download(url):
         ''' Downloads data into current working directory with name owid-covid-data.csv '''
         r = requests.get(url, allow_redirects=True)
@@ -20,7 +17,6 @@ def dat():
         )
         data = data.set_index('date')
         data = data.sort_values('date', ascending=True)
-        
         return data
 
 def changes(countries):
@@ -40,11 +36,9 @@ def sub_data(countries, data):
                 use.append(data.loc[data['location']==country.title()])
         return use
 
-def make_plot(countries, data):
-       
+def make_plot(countries, data): 
         plt.figure(figsize=(12, 6))
-
-        #creating each subplot
+        
         plt.subplot(2,2,1)
         for country in countries:
                 plt.plot(data.loc[data['location']==country.title()]['total_cases'])
