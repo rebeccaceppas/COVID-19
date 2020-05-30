@@ -37,7 +37,7 @@ def sub_data(countries, data):
         ''' Uses inputs countries list from user, creates sub DataFrames for desired countries. '''
         use = []
         for country in countries:      
-                use.append(data.loc[data['location']==country.capitalize()])
+                use.append(data.loc[data['location']==country.title()])
         return use
 
 def make_plot(countries, data):
@@ -47,7 +47,7 @@ def make_plot(countries, data):
         #creating each subplot
         plt.subplot(2,2,1)
         for country in countries:
-                plt.plot(data.loc[data['location']==country.capitalize()]['total_cases'])
+                plt.plot(data.loc[data['location']==country.title()]['total_cases'])
         plt.legend(countries)
         plt.title('Total cases of COVID-19')
         plt.xlabel('Date')
@@ -55,7 +55,7 @@ def make_plot(countries, data):
 
         plt.subplot(2,2,2)
         for country in countries:
-                plt.plot(data.loc[data['location']==country.capitalize()]['total_deaths'])
+                plt.plot(data.loc[data['location']==country.title()]['total_deaths'])
         plt.legend(countries)
         plt.title('Total deaths by COVID-19')
         plt.xlabel('Date')
@@ -63,7 +63,7 @@ def make_plot(countries, data):
 
         plt.subplot(2,2,3)
         for country in countries:
-                plt.plot(data.loc[data['location']==country.capitalize()]['new_cases'])
+                plt.plot(data.loc[data['location']==country.title()]['new_cases'])
         plt.legend(countries)
         plt.title('New Cases of COVID-19')
         plt.xlabel('Date')
@@ -71,7 +71,7 @@ def make_plot(countries, data):
 
         plt.subplot(2, 2, 4)
         for country in countries:
-                plt.plot(data.loc[data['location']==country.capitalize()]['new_deaths'])
+                plt.plot(data.loc[data['location']==country.title()]['new_deaths'])
         plt.legend(countries)
         plt.title('New Deaths by COVID-19')
         plt.xlabel('Date')
@@ -82,7 +82,7 @@ def make_plot(countries, data):
 
 download('https://covid.ourworldindata.org/data/owid-covid-data.csv')
 data = dat()
-countries = input('What countries do you want to look at? Input them with a single space as separation. Ex. Brazil US Canada \n').split(' ')
-changes(countries)
+countries = input('What countries do you want to look at? Separate them with a comma. Ex: Brazil, United States, Canada \n').split(', ')
+countries = changes(countries)
 sub_data(countries, data)
 make_plot(countries, data)
