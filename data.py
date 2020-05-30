@@ -1,64 +1,49 @@
-from matplotlib import pyplot
+import requests
 import pandas as pd
-import OpenBlender
-import json
+import matplotlib.pyplot as plt
+import os
 
-url = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
+def download(url):
+        ''' Downloads data into current working directory with name owid-covid-data.csv '''
+        r = requests.get(url, allow_redirects=True)
+        open('owid-covid-data.csv', 'wb').write(r.content)
 
-data = pd.read_csv(
-        '/Users/rebeccaceppas/code/COVID-19/owid-covid-data.csv', 
+def data():
+        ''' Creates pandas DataFrame for columns location, date, total and new cases, and total and new deaths. '''
+        data = pd.read_csv(
+        os.getcwd()+'/owid-covid-data.csv', 
         usecols=['location', 'date', 'total_cases', 'new_cases', 'total_deaths', 'new_deaths'],
         parse_dates=['date'],
         )
+        data = data.set_index('date')
+        data = data.sort_values('date', ascending=True)
+        return data
 
-data = data.set_index('date')
-data = data.sort_values('date', ascending=True)
+def sub_data(countries, data):
+        ''' Uses inputs countries list from user, creates sub DataFrames for desired countries. '''
+        for country in countries:      
+                country = data.loc[data['location']==country.capitalize()]
+        print(countries.head())
+        return countries
 
-#Country specific data
-Brazil = data.loc[data['location']=='Brazil']
-Canada = data.loc[data['location']=='Canada']
-US = data.loc[data['location']=='United States']
+""" def make_plot(countries):
+       
+
+       #4 for loops, each for one of the plots
+       
+        pass """
+
+""" def final():
+        download(url)
+        data(url)
+        sub_data(countries)
+        make_plot()
+        pass """
 
 
-#creating plot object
-pyplot.figure(figsize=(12, 6))
 
-#creating each subplot
-pyplot.subplot(2,2,1)
-pyplot.plot(Brazil['total_cases'])
-pyplot.plot(Canada['total_cases'])
-pyplot.plot(US['total_cases'])
-pyplot.legend(['Brazil', 'Canada', 'United States'])
-pyplot.title('Total cases of COVID-19')
-pyplot.xlabel('Date')
-pyplot.ylabel('Total Cases (millions)')
-
-pyplot.subplot(2,2,2)
-pyplot.plot(Brazil['total_deaths'])
-pyplot.plot(Canada['total_deaths'])
-pyplot.plot(US['total_deaths'])
-pyplot.legend(['Brazil', 'Canada', 'United States'])
-pyplot.title('Total deaths by COVID-19')
-pyplot.xlabel('Date')
-pyplot.ylabel('Total Deaths')
-
-pyplot.subplot(2,2,3)
-pyplot.plot(Brazil['new_cases'])
-pyplot.plot(Canada['new_cases'])
-pyplot.plot(US['new_cases'])
-pyplot.legend(['Brazil', 'Canada', 'United States'])
-pyplot.title('New Cases of COVID-19')
-pyplot.xlabel('Date')
-pyplot.ylabel('New Cases')
-
-pyplot.subplot(2, 2, 4)  # rows, columns, panel selected
-pyplot.plot(Brazil['new_deaths'])
-pyplot.plot(Canada['new_deaths'])
-pyplot.plot(US['new_deaths'])
-pyplot.legend(['Brazil', 'Canada', 'United States'])
-pyplot.title('New Deaths by COVID-19')
-pyplot.xlabel('Date')
-pyplot.ylabel('New Deaths')
-
-pyplot.tight_layout()
-pyplot.show()
+url = 'https://covid.ourworldindata.org/data/owid-covid-data.csv'
+download(url)
+data()
+countries = input('What countries do you want to look at? Input them with a single space as separation. Ex. Brazil US Canada \n').split(' ')
+sub_data(countries, data)
