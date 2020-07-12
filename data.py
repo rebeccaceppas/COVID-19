@@ -35,6 +35,7 @@ def make_plot(countries, data):
         for country in countries:
                 plt.plot(data.loc[data['location']==country.title()]['total_cases'])
         plt.legend(countries)
+        #plt.text()
         plt.title('Total cases of COVID-19')
         plt.xlabel('Date')
         plt.ylabel('Total Cases (millions)')
@@ -55,7 +56,7 @@ def make_plot(countries, data):
         plt.xlabel('Date')
         plt.ylabel('New Cases')
 
-        plt.subplot(2, 2, 4)
+        plt.subplot(2,2,4)
         for country in countries:
                 plt.plot(data.loc[data['location']==country.title()]['new_deaths'])
         plt.legend(countries)
@@ -68,6 +69,6 @@ def make_plot(countries, data):
 
 download('https://covid.ourworldindata.org/data/owid-covid-data.csv')
 data = dat()
-countries = input('What countries do you want to look at? Separate them with a comma. Ex: Brazil, United States, Canada \n').split(', ')
+countries = input('What countries do you want to look at? Separate them with a comma. Ex: Brazil, United States, Canada \n Input: ').split(', ')
 countries = changes(countries)
 make_plot(countries, data)
